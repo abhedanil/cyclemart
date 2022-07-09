@@ -1,0 +1,42 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-between my-5">
+        <input id="myInput" type="text" placeholder="Search..">
+        <a href="/admin/addCoupon" class="btn btn-success">Add Coupon</a>
+    </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Coupon Name</th>
+                    <th scope="col">Coupon Code</th>
+                    <th scope="col">limit</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Expiry Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                {{#each allcoupons}}
+                <tr>
+                    <td><strong>{{this.couponName}}</strong></td>
+                    <td style="font-size:12 px">
+                        <strong>{{this.couponCode}}</strong></td>
+                    </td>
+                    <td>{{this.limit}}</td>
+                    <td>{{this.discount}}</td>
+                    <td>{{this.expirydate}}</td>
+                    
+                    <td>
+                        <a href="/admin/deleteCoupons/{{this._id}}" onclick="return confirm('Are you suren to delete coupon: {{this.couponName}}?')" class="btn btn-danger">Delete</a>
+                        
+                        
+                    </td>
+                </tr>
+            {{/each}}
+            
+            
+            
+            </tbody>
+        
+        
+        </table>

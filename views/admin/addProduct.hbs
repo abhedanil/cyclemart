@@ -1,0 +1,112 @@
+<div class="container mt-5 col-xl-6">
+    <form class="text-center border border-light p-5" action="/admin/addProducts" method="post"
+        enctype="multipart/form-data">
+
+        <p class="h4 mb-4">Add Product</p>
+
+        <div>
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control mb-4" placeholder="Product Name"
+                name="productName" />
+        </div>
+
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col d-flex">
+                <div class="col d-flex">
+                    <select name="brand" class="form-control">
+                        <option value="none" selected>Choose Brand Name</option>
+                        {{#each brandName}}
+                        <option>{{this.brandname}}</option>
+                        {{/each}}
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col d-flex">
+                <select name="category" class="form-control me-3">
+                    <option value="none" selected>Choose Category</option>
+                    {{#each category}}
+                    <option>{{this.category}}</option>
+                    {{/each}}
+                </select>
+
+            </div>
+
+            <div class="col d-flex">
+                <select name="subcategory" class="form-control">
+                    <option value="none" selected>Choose Sub-category</option>
+                    {{#each subcategory}}
+                    <option>{{this.subcategory}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col me-3">
+                <!-- price -->
+                <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Price"
+                    name="price" />
+            </div>
+            <div class="col">
+                <!-- price -->
+                <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Discount"
+                    name="discount" />
+            </div>
+        </div>
+
+
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col">
+                <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Stock"
+                    name="stock" />
+            </div>
+        </div>
+        <textarea type="text" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Description"
+            name="description"></textarea>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 1</label>
+            <div class="col-sm-10">
+                <input type="file" name="image1" id="basic-default-images" class="form-control image"
+                    placeholder="Image 1" aria-label="" aria-describedby="" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 2</label>
+            <div class="col-sm-10">
+                <input type="file" name="image2" id="basic-default-images" class="form-control image"
+                    placeholder="Image2" aria-label="" aria-describedby="" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 3</label>
+            <div class="col-sm-10">
+                <input type="file" name="image3" id="basic-default-images" class="form-control image"
+                    placeholder="Image3" aria-label="" aria-describedby="" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 4</label>
+            <div class="col-sm-10">
+                <input type="file" name="image4" id="basic-default-images" class="form-control image"
+                    placeholder="Image4" aria-label="" aria-describedby="" required />
+            </div>
+        </div>
+         <button type="button" class="btn btn-primary text-center">Submit</button>
+    </form>
+</div>
+{{! <button class="btn btn-info my-4 btn-block" type="submit">Submit</button> }}
+
+
+

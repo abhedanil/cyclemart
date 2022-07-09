@@ -1,0 +1,89 @@
+<div class="container-fluid">
+    <input id='myInput' class="m-2 col-2 list-inline-item" onkeyup='searchTable()' type='text'>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Firstname</th>
+                <th>Email</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {{#each user}}
+            <tr>
+                <td>{{this.firstname}}</td>
+                <td>{{this.email}}</td>
+                <td>                    
+                    <div id="refresh" onClick="refreshPage()">
+                        {{#if block}}
+                        <a onclick="unBlockUser('{{this._id}}')" class="btn btn-success active"
+                         role="button" data-bs-toggle="button" aria-pressed="true">Unblock</a>
+                        {{else}}
+                        <a onclick="blockUser('{{this._id}}')" class="btn btn-danger" role="button"
+                                        data-bs-toggle="button">block</a>
+                        {{/if}}                
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+ {{!-- div refresh --}}
+
+ 
+  
+ <script>
+        function unBlockUser(proId) {
+            $.ajax({
+                url: '/admin/unBlockUser/' + proId,
+                method: 'get',
+                success: (response) => {
+                   location.reload()
+                }
+            })
+        }
+</script>
+
+<script>
+        function blockUser(proId) {
+            $.ajax({
+                url: '/admin/blockUser/' + proId,
+                method: 'get',
+                success: (response) => {
+                    location.reload()
+                }
+            })
+        }
+</script>
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("userTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+        

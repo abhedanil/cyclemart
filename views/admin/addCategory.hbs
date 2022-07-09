@@ -1,0 +1,81 @@
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-sm-12 col-xl-6 mt-4 ">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4 text-center">Add Category</h6>
+        <form action="/admin/Addcategory" method="post">
+          <div class="mb-3 col-6">
+            <label for="exampleInputEmail1" class="form-label">Enter new Category</label>
+           <input type="text" name="category" id="typePasswordX" class="form-control form-control-lg"
+              required />
+
+          </div>
+
+
+          <div class="">
+            <button type="submit" class="btn btn-primary ">Add Category</button>
+          </div>
+          <div class="row mb-3">
+           
+          <div class="col-sm-10">
+                <img src="/imgUploads/{{product.Images.[0].image1}}" alt="" srcset="" style="width: 100px;height: auto; "
+                    class="mb-2" id="imgView" />
+                <input type="file" name="image1" id="basic-default-images" class="form-control image" value="{{product.Images.[0].image1}}" aria-label=""
+                    onchange="viewImage(event)" required />
+        
+            </div>
+        </div>
+        <p style="color:red;">{{ Caterr }}</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-xl-6 mt-4 ">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4 text-center">Add SubCategory</h6>
+        <form action="/admin/Addsubcategory" method="post">
+          <div class="mb-3">
+            <label for="" class="form-label">Enter SubCategory Name</label>
+            <input type="text"  name="subcategory" class="form-control" id="" aria-describedby=""  required/>
+            <div class="form-group col-md-4">
+              <label for="inputState" >Category</label>
+              <select id="inputState" name="categoryname" class="form-control" required>
+                <option selected>Choose Category</option>
+                {{#each allCategory}}
+                <option>{{this.category}}</option>
+                {{/each}}
+              </select>
+            </div>
+
+          </div>
+
+
+          <div class=>
+            <button type="submit" class="btn btn-primary ">Add SubCategory</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-xl-6 mt-4 ">
+      <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4 text-center">Add Brand</h6>
+        <form action="/admin/AddBrands" method="post">
+          <div class="mb-3 col-6">
+            <label for="exampleInputEmail1" class="form-label">Enter new Brand</label>
+            <input type="text" name="brand_Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required />
+
+          </div>
+
+
+          <div class="">
+            <button type="submit" class="btn btn-primary ">Add Brand</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>

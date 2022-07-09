@@ -1,0 +1,142 @@
+
+
+
+
+<div class="container mt-5 col-xl-6">
+    <form class="text-center border border-light p-5" action="/admin/editProducts/{{product._id}}" method="post"
+        enctype="multipart/form-data">
+
+        <p class="h4 mb-4">Edit Product</p>
+ 
+        <div>
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control mb-4" placeholder="Product Name"
+                name="productName" value="{{product.productName}}" />
+        </div>
+        
+        
+        <div class="form-row mb-4 d-flex">
+            <div class="col d-flex">
+                <div class="col d-flex">
+                    <select name="brand" class="form-control">
+                        <option value="{{product.brand}}" selected>Choose Brand Name</option>
+                        {{#each brands}}
+                        <option  value="{{this._id}}">{{this.brandname}}</option>
+                        {{/each}}
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col d-flex">
+                <select name="category" class="form-control me-3">
+                    <option value="none" selected value="{{product.category}}">Choose Category</option>
+                    {{#each categories}}
+                    <option  value="{{this._id}}">{{this.category}}</option>
+                    {{/each}}
+                </select>
+
+            </div>
+
+            <div class="col d-flex">
+                <select name="subcategory" class="form-control">
+                    <option value="{{product.subcategory}}" selected>Choose Sub-category</option>
+                    {{#each subcategories}}
+                    <option  value="{{this._id}}">{{this.subcategory}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col me-3">
+                <!-- price -->
+                <input type="number" id="defaultRegisterFormFirstName" value="{{product.Price}}"  class="form-control" placeholder="Price"
+                    name="price" />
+            </div>
+            <div class="col">
+                <!-- price -->
+                <input type="number" id="defaultRegisterFormFirstName"  value="{{product.discount}}" class="form-control" placeholder="Discount"
+                    name="discount" />
+            </div>
+        </div>
+
+
+
+        <div class="form-row mb-4 d-flex">
+            <div class="col">
+                <input type="text" id="defaultRegisterFormLastName" value="{{product.stock}}" class="form-control" placeholder="Stock"
+                    name="stock" />
+            </div>
+        </div>
+        <textarea type="text" id="defaultRegisterFormEmail" class="form-control mb-4" value="{{product.description}}" placeholder="Description"
+            name="description"></textarea>
+        
+        
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 1</label>
+            <div class="col-sm-10">
+                <img src="/imgUploads/{{product.Images.[0].image1}}" alt="" srcset="" style="width: 100px;height: auto; "
+                    class="mb-2" id="imgView" />
+                <input type="file" name="image1" id="basic-default-images" class="form-control image" value="{{product.Images.[0].image1}}" aria-label=""
+                    onchange="viewImage(event)" required />
+        
+            </div>
+        </div>
+        
+        {{!-- ----Image2---- --}}
+        
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 2</label>
+            <div class="col-sm-10">
+                <img src="/imgUploads/{{product.Images.[0].image2}}" alt="" srcset="" style="width: 100px;height: auto; "
+                    class="mb-2" id="imgView" />
+                <input type="file" name="image2" id="basic-default-images" class="form-control image"
+                    onchange="viewImage(event)" />
+                <input type="file" id="defaultRegisterFormLastName" class="form-control" style="display: none;" name="image1"
+                    value="{{product.Images.[0].image2}}" />
+            </div>
+        </div>
+        
+        {{!-- ----Image3---- --}}
+        
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 3</label>
+            <div class="col-sm-10">
+                <img src="/imgUploads/{{product.Images.[0].image3}}" alt="" srcset="" style="width: 100px;height: auto; "
+                    class="mb-2" id="imgView" />
+                <input type="file" name="image3" id="basic-default-images" class="form-control image"
+                    onchange="viewImage(event)" />
+                <input type="file" id="defaultRegisterFormLastName" class="form-control" style="display: none;" name="image1"
+                    value="{{product.Images.[0].image3}}" />
+            </div>
+        </div>
+        
+        {{!-- ----Image4---- --}}
+        
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-phone">Image 4</label>
+            <div class="col-sm-10">
+                <img src="/imgUploads/{{product.Images.[0].image4}}" alt="" srcset="" style="width: 100px;height: auto; "
+                    class="mb-2" id="imgView" />
+                <input type="file" name="image4" id="basic-default-images" class="form-control image" />
+                <input type="file" id="defaultRegisterFormLastName" class="form-control" style="display: none;" name="image1"
+                    value="{{product.Images.[0].image3}}" />
+            </div>
+        {{! <button class="btn btn-info my-4 btn-block" type="submit">Submit</button> }}
+        <input type="submit" class="btn btn-info my-4 btn-bloc k" style="width: 100%;" />
+
+    </form>
+</div>
+
+<script>
+    function viewImage(event)=> {
+      document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+    }
+
+</script>

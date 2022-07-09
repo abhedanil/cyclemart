@@ -1,0 +1,35 @@
+
+
+
+<div class="container mt-5">
+    
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Order Id</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Payment method</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                {{#each orders}}
+                <tr>
+                    <td>{{this._id}}</td>
+                    <td>{{this.ordered_on}}</td>
+                    <td>₹{{this.grandTotal}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.payment_status}}</td>
+                    <td><a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Details</a></td>
+                </tr>
+            {{/each}}
+            
+            
+            
+            </tbody>
+        
+        
+        </table>

@@ -1,0 +1,62 @@
+{{#if alert}}
+<div class="alert alert-success alert-dismissible fade show container mt-5 col-xl-6  " id="success-alert" role="alert">
+    <strong>{{alert}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between my-5">
+        <input id="myInput" type="text" placeholder="Search..">
+        <a href="/admin/addProducts" class="btn btn-success">Add Products</a>
+    </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                {{#each products}}
+                <tr>
+                   <td><img
+                      style="width: 90px;"
+                      src="/imgUploads/{{this.Images.0.image1}}"
+                      alt=""
+                    />
+                  </td>
+                    <td><strong>{{productName}}</strong></td>
+                    <td style="font-size:12 px">
+                        Bike Name:{{this.productName}}
+                        <br>
+                        Brand:{{this.brand}}
+                        <br>
+                        Category :{{this.category}}
+                        <br>
+                        Subcategory: {{this.subcategory}}
+                        <br>
+                    </td>
+                    <td>{{this.stock}}</td>
+                    <td>{{this.Price}}</td>
+                    <td>
+                        <a href="/admin/editProduct/{{this._id}}"  class="btn btn-success">Edit</a>
+                        <a href="/admin/deleteProducts/{{this._id}}" onclick="return confirm('Are you suren to delete {{this.productName}}?')" class="btn btn-danger">Delete</a>
+                        
+                        
+                    </td>
+                </tr>
+            {{/each}}
+            
+            
+            
+            </tbody>
+        
+        
+        </table>

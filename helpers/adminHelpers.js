@@ -73,7 +73,7 @@ module.exports={
       
       getProducts:()=>{
         return new Promise(async (resolve,reject)=>{
-          const allProducts = await productData.find({}).populate('category').populate('subcategory').lean()
+          const allProducts = await productData.find({}).populate('brand').populate('category').populate('subcategory').lean()
           resolve(allProducts)
         })
       },

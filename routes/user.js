@@ -210,7 +210,7 @@ router.get("/shopPage", async (req, res, next) => {
  
 })
 
-router.get("/shopsingle/:id",VerifyLogin, async (req, res) => {
+router.get("/shopsingle/:id", async (req, res) => {
   let user = req.session.user
   CartCount=null
   if(user){

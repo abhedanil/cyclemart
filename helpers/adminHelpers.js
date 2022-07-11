@@ -163,12 +163,12 @@ getSubcategories:()=>{
 addBrand: (Data) => {
   return new Promise(async (resolve, reject) => { 
 
-      const brandexist = await brand.findOne({brandname: Data.brand_Name })
+      const brandexist = await brand.findOne({BrandName: Data.brand_Name })
       if (brandexist) {
         reject({ status: false, msg: "This Brand already exists!" });
       } else {
         const addBrand = await new brand({
-          brandname: Data.brand_Name,
+          BrandName: Data.brand_Name,
         });
         await addBrand.save(async (err, result) => {
           if (err) {

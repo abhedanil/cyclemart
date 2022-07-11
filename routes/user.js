@@ -291,6 +291,14 @@ router.get("/viewWishlist",VerifyLogin,async(req,res)=>{
 })
 
 
+router.post("/deleteprofromwishlist", async (req, res) => {
+  const wishlist = req.body.proId;
+  userHelper.deletewishlist(wishlist, req.session.user._id).then((response) => {
+    res.json({ status: true });
+  });
+});
+
+
 router.post("/change-product-quantity", (req, res) => {
   userHelpers.changeProductQuantity(req.body, req.session.user).then();
   res.json({ status: true });

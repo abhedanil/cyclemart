@@ -123,7 +123,7 @@ module.exports={
       console.log('in get all products');
       return new Promise(async(resolve,reject)=>{
         console.log('inside rs');
-        const allproducts = await productData.find({}).populate('category').populate('subcategory').limit(3).lean();
+        const allproducts = await productData.find({}).populate('category').populate('subcategory').limit(10).lean();
         resolve(allproducts)
       })
     },
@@ -277,6 +277,18 @@ module.exports={
       })
 
     },
+
+    deletewishlist:()=>{
+
+    return new Promise(async (resolve, response) => {
+      const remove = await wishlistmodel.updateOne(
+        { user_id: user },
+        { $pull: { products: { pro_Id: proId } } }
+      );
+      resolve({ msg: "comfirm delete" });
+    });
+  },
+
     getCartProducts:(userId)=>{
       
       console.log(userId)

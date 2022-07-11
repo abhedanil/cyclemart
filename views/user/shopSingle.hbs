@@ -19,7 +19,7 @@
             <p>{{product.description}}</p>
             <p><strong class="text-primary h4"> ₹{{product.Price}}</strong></p>
             
-            <div class="mb-5">
+            {{!-- <div class="mb-5">
               <div class="input-group mb-3" style="max-width: 120px;">
               <div class="input-group-prepend">
                 <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
@@ -30,12 +30,12 @@
               </div>
             </div>
 
-            </div>
+            </div> --}}
             {{!-- <a oncick="//add_to_cart('{{product._id}}')" class="buy-now btn btn-sm btn-primary">Add To Cart</a> --}}
 
             <a onclick="add_to_cart('{{product._id}}')"><button class="btn btn-info">Add to cart</button> </a>
             <a onclick="add_to_wishlist('{{product._id}}')"  ><button class="btn btn-warning">Add to Wishlist</button></a>
-            <a href="/viewWishlist/"><button class="btn btn-success">view wishlist</button></a>
+            {{!-- <a href="/viewWishlist/"><button class="btn btn-success">view wishlist</button></a> --}}
             
           </div>
         </div>

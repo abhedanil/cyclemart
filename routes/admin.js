@@ -60,13 +60,13 @@ router.get("/")
 
 router.get("/addProducts", async (req, res) => {
   const category = await adminHelpers.getCategories();
-  const brandName = await adminHelpers.getBrands();
+  const BrandName = await adminHelpers.getBrands();
   const subcategory = await adminHelpers.getSubcategories();
 
   res.render("admin/addProduct", {
     category,
     subcategory,
-    brandName,
+    BrandName,
     layout: "adminlayout"
   });
 });

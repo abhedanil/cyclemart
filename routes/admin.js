@@ -8,6 +8,7 @@ const Storage = require("../middleware/multer");
 const subcategory = require('../models/subcategory');
 const { fields } = require('../middleware/multer');
 const userHelpers = require('../helpers/userHelpers');
+const moment = require('moment')
 
 /* GET users listing. */
 
@@ -101,7 +102,42 @@ router.post("/addProducts", Storage.fields([
       })
   })
 
-
+  router.post("/getData", async (req, res) => {
+    const date = new Date(Date.now());
+    const month = date.toLocaleString("default", { month: "long" });
+    adminHelpers.salesReport(req.body).then((data) => {
+      // let pendingAmount = data.pendingAmount;
+      let salesReport = data.salesReport;
+      let brandReport = data.brandReport;
+      // let orderCount = data.orderCount;
+      // let totalAmountPaid = data.totalAmountPaid;
+      // let totalAmountRefund = data.totalAmountRefund;
+       console.log(month._id)
+      let dateArray = [];
+      let totalArray = [];
+      salesReport.forEach((s) => {
+        dateArray.push(`${month}-${s._id} `);
+        totalArray.push(s.total);
+      });
+      console.log(salesReport)
+      let brandArray = [];
+      let sumArray = [];
+      brandReport.forEach((s) => {
+        brandArray.push(s._id);
+        sumArray.push(s.totalAmount);
+      });
+      res.json({
+        // totalAmountRefund,
+        dateArray,
+        totalArray,
+        brandArray,
+        sumArray,
+        // orderCount,
+        // totalAmountPaid,
+        // pendingAmount,
+      });
+    });
+  });
 
 router.post("/AddCategory", (req, res) => {
   console.log(req.body);
@@ -258,6 +294,36 @@ router.get("/unBlockUser/:id",(req,res)=>{
     res.json({status: true})
   })
 })
+
+router.get("/manageOrders",async(req,res)=>{
+
+  const orders = await adminHelpers.getAllOrders()
+
+    orders.forEach((element)=>{
+      element.ordered_on = moment(element.ordered_on).format('MMMM Do YYYY, h:mm:ss a')
+     })
+  
+
+  res.render("admin/viewOrders",{layout:"adminlayout",orders})
+})
+
+router.get("/viewordersinorder/:id",async(req,res)=>{ 
+
+  orderProducts= await adminHelpers.OrderDetails(req.params.id)
+  console.log(orderProducts+"++++++++++++")
+
+  res.render("admin/ordersinorder",{layout:"adminlayout",orderProducts})
+})
+
+router.post('/changeOrderStatus',(req,res)=>{
+  console.log(req.body)
+  console.log('inside change')
+  adminHelpers.changeOrderStatus(req.body).then((response)=>{
+    res.redirect('/admin/manageOrders')
+  })
+})
+
+
 
 router.get("/addCoupon",(req,res)=>{
 

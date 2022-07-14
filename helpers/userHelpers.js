@@ -206,7 +206,7 @@ module.exports={
             await cart
               .findOneAndUpdate(
                 { user_Id: userId },
-                { $push: { products: { pro_Id: proId, Price: product.Price } } }
+                { $push: { products: { pro_Id: proId, Price: product.Price,productName: product.productName} } }
               )
               .then(async (res) => {
                 resolve({ msg: '"Added", count: res.product.length + 1 ' });
@@ -215,7 +215,7 @@ module.exports={
         } else {
           const newcart = new cart({
             user_Id: userId,
-            products: { pro_Id: proId, Price: product.Price },
+            products: { pro_Id: proId, Price: product.Price ,productName: product.productName},
           });
           await newcart.save((err, result) => {
             if (err) {
@@ -477,7 +477,7 @@ module.exports={
 
       return new Promise(async(resolve,reject)=>{
 
-        const orders= await ordermodel.find({user_Id:userId}).lean()
+        const orders= await ordermodel.find({user_Id:userId}).sort({_id:-1}).lean()
         console.log("---------------------")
         console.log(orders+"---------------------")
         resolve(orders)
@@ -605,10 +605,23 @@ module.exports={
 
    
   cancelorder:(data)=>{
-    order = mongoose.Types.ObjectId(data.orderId);
-    let quantity = parseInt(data.quantity);
+    orderId = mongoose.Types.ObjectId(data.orderId);
+    proId = mongoose.Types.ObjectId(data.proId);
+    console.log("print")
+    console.log(orderId+"orderId")
+    console.log(proId+"proId")
     const status = "Cancelled";
-    
+    return new Promise(async(resolve,reject)=>{
+      const cancelorder = await ordermodel.updateMany(
+        {_id:orderId,"products._id":proId},
+        {$set:
+          {
+            "products.$.status":status,
+            "products.$.orderCancelled":true,
+          }}
+      )
+      resolve()
+    })
     },
   
 doresetPass:(rData,rid)=>{
@@ -625,9 +638,14 @@ doresetPass:(rData,rid)=>{
       {$set:{password:rData.password}})
       resolve(resetuser)
 
-
-
     })
+},
+ 
+userdetails:(userid)=>{
+  return new Promise(async(resolve,reject)=>{
+    usersprofile= await User.findOne({}).lean()
+    resolve(usersprofile)
+  })
 }
 
 }

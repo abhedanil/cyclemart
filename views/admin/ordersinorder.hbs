@@ -1,0 +1,121 @@
+
+
+
+<section class="h-100 gradient-custom pb-5">
+  <div class="container  ">
+    <div class=" pb-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-10 col-xl-8 mt-5">
+        <div class="card" style="border-radius: 10px;">
+         <section class="mt-5">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0" style="color: #ffa020;">Receipt</p>
+              <p class="small text-muted mb-0">Receipt Voucher : {{ orderProducts._id}}</p>
+            </div>
+            {{#each orderProducts.products}}
+            <div class="card shadow-0 border mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-2">
+                    <img src="/imgUploads/{{pro_Id.Images.0.image1}}"
+                      class="img-fluid" alt="Phone">
+                  </div>
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0">{{this.pro_Id.productName}}</p>
+                  </div>
+                  
+                  <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">Qty:{{this.quantity}}</p>
+                  </div>
+
+                  <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">₹{{this.subTotal}}</p>
+                  </div>
+                 
+                 
+                  <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">status : <span style="color:orangered"> {{this.status}}</span></p>
+                  </div>
+                  {{!-- {{#if orderCancelled}} --}}
+                  {{!-- {{else}} --}}
+                  <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                    {{!-- <form  id="statusForm">
+                                            
+                                            <select class="form-control" id="orderStatus" name="orderStatus" >
+                                                <option value="{{this.status}}">{{this.status}}</option>
+                                                <option value="Ordered">Ordered</option>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="Delivered">Delivered</option>
+                                            </select>
+                                            <input type="text" name="orderId" value="{{../order._id}}" hidden>
+                                            <input type="text" name="proId" value="{{this._id}}" hidden>
+                                          <button type="submit" class="btn" style="background-color:rgb(231, 219, 219)">Change</button>
+                    </form> --}}
+                    <form method="post" action="/admin/changeOrderStatus" class=" d-flex justify-content-center align-items-center">
+            
+                            <select class="form-control ms-2" id="exampleFormControlSelect1" name="orderStatus">
+                                <option>Status</option>
+                                <option>Ordered</option>
+                                <option>Shipped</option>
+                                <option>Out for Delivery</option>
+                                <option>Delivered</option>
+                                <option>Cancelled</option>
+            
+                            </select>
+                            <input type="text" name="orderId" value="{{../orderProducts._id}}" hidden>
+                            <input type="text" name="proId" value="{{this._id}}" hidden>
+                            <a><button type="submit" class="btn btn-success ms-2" 
+                                    href="#">Change</button></a>
+</form>
+                  </div>
+                  {{!-- {{/if}} --}}
+                </div>
+                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 0;">
+                <div class="row d-flex align-items-center">
+                  
+                </div>
+              </div>
+            </div>
+
+            {{/each}}
+            
+
+            <div class="d-flex justify-content-between pt-2">
+              <p class="fw-bold mb-0"><span style="color:#83b1d0;">Order Details</span></p>
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Subtotal : </span> ₹ {{orderProducts.Total}}</p>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Invoice Date :</span> {{orderProducts.ordered_on}}</p>   
+            </div>
+            <div class="d-flex justify-content-between ">
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Shipping Charge : </span> ₹ {{orderProducts.ShippingCharge}}</p>
+            </div>
+            {{!-- <div class="d-flex justify-content-between ">
+             
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Coupon Discount : </span> ₹ {{orderProducts.coupondiscountedPrice}}</p>
+            </div> --}}
+            <div class="d-flex justify-content-between ">
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Grand Total : </span> ₹ {{orderProducts.grandTotal}}</p>
+            </div>
+          </div>
+          <div class="card-footer border-0 px-4 py-5 "
+            style="background-color: #628d95; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+            <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+              paid: <span class="h2 mb-0 ms-2">₹{{orderProducts.grandTotal}}</span></h5>
+          </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</section>
+        </div>
+        </section>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+

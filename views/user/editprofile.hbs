@@ -1,0 +1,118 @@
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"
+></script>
+<script
+  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+></script>
+<style>
+  body { background: #f7f7ff; margin-top: 20px; } .card { position: relative;
+  display: flex; flex-direction: column; min-width: 0; word-wrap: break-word;
+  background-color: #fff; background-clip: border-box; border: 0 solid
+  transparent; border-radius: .25rem; margin-bottom: 1.5rem; box-shadow: 0 2px
+  6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%); } .me-2 {
+  margin-right: .5rem !important; }
+</style>
+<div class="container mt-5">
+  <div class="main-body">
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img
+                src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                alt="Admin"
+                class="rounded-circle"
+                width="150"
+              />
+              <div class="mt-3">
+                <h4>{{Addresses.name}}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card1">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <form
+                  method="post"
+                  action="/Editproflie"
+                  class="colorlib-form"
+                  id="signup-form"
+                >
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="fname">First Name</label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          class="form-control"
+                          value="{{Addresses.name}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="Phone">Mobile Number</label>
+                        <input
+                          type="number"
+                          id="zippostalcode"
+                          id="mobile"
+                          name="mobile"
+                          class="form-control"
+                          value="{{Addresses.phonenumber}}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <a href="/address-page" class="btn btn-primary">Cancel</a>
+                      <button
+                        class="btn btn-success"
+                        type="submit"
+                      >Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col-lg-4">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+></script>
+
+<script>
+  $(document).ready(function(){ $("#signup-form").validate({ errorClass:"err",
+  rules:{ name:{ required:true, minlength:4, maxlength:15, namevalidation:true
+  }, mobile:{ required:true, minlength:10, maxlength:15 }, email:{
+  required:true, email:true }, password:{ required:true, minlength:5,
+  {{! strongePassword:true }}
+
+  }, newpassword:{ required:true, equalTo:"#password" } }, messages:{ name:{
+  required:"Please enter your name", minlength:"At least 4 characters required",
+  maxlength:"Maximum 15 characters are allowed" }, mobile:{ required:"Please
+  enter your phone number", minlength:"Enter 10 numbers", maxlength:"Number
+  should be less than or equal to 15 numbers" }, email:{ required:"Please enter
+  your email id", email:"Enter a valid email" }, // password:"Please enter your
+  password", newpassword:{ required:"confirm password", equalTo:"Password
+  doesn't matches" } } }) $.validator.addMethod("namevalidation",
+  function(value, element) { return /^[A-Za-z]+$/.test(value); }, "Sorry,only
+  alphabets are allowed" ); $.validator.addMethod("strongePassword",
+  function(value,element) { return /^[A-Za-z0-9\d=!\-@._]$/.test(value) &&
+  /[a-z]/.test(value) && /\d/.test(value) && /[A-Z]/.test(value); }, "The
+  password must contain at least 1 number,1 lower case letter, and 1 upper case
+  letter" ); })
+</script>

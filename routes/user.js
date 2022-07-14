@@ -215,18 +215,20 @@ router.get("/shopsingle/:id", async (req, res) => {
   CartCount=null
   if(user){
     CartCount = await userHelpers.getCartCount(user)
-  }
+  }  
    
   let product = await userHelpers.getSingleProduct(req.params.id)
   res.render("user/shopSingle", { product, user: req.session.user , CartCount });
 
 });
 
+
+
 router.get("/cart", VerifyLogin,async(req,res,next) => {
   let user = req.session.user
   console.log(user, "user");
   
-  let CartCount = await userHelpers.getCartCount(user) 
+  let CartCount = await userHelpers.getCartCount(user)  
   if( CartCount>0){
   console.log(user)
 
@@ -236,7 +238,7 @@ router.get("/cart", VerifyLogin,async(req,res,next) => {
   const netTotal = totalAmount.nettTotal.total
   const deliveryCharge = await userHelpers.deliverycharge(netTotal)
   const grandTotal = await userHelpers.grandTotal(netTotal,deliveryCharge)
-  
+   
   console.log(netTotal)
   let cartItems =await userHelpers.getCartProducts(user._id)
   res.render("user/cart",{cartItems,user,CartCount,subTotal,netTotal,deliveryCharge,grandTotal})
@@ -398,9 +400,35 @@ res.render("user/detailedOrder",{user,orderProducts})
 
 
 router.post("/cancel-order", (req, res) => {
+  console.log("******")
+  console.log(req.body)
+  console.log("********")
   userHelper.cancelorder(req.body).then((response) => {
+    console.log("****")
     res.json({ status: true });
   });
+});  
+ 
+router.get("/userprofile",VerifyLogin,async(req,res)=>{
+  const user = req.session.user
+  userdetails= await userHelpers.userdetails(req.session.user._id)
+  console.log(userdetails)
+  res.render("user/userprofile",{userdetails,user})
+})
+
+router.get("/edit-profile",VerifyLogin, async (req, res) => {
+  // const Addresses = await userHelper.getAddresses(req.session.user);
+  // cartcount = await userHelper.getcartcount(req.session.user._id);
+  res.render("user/editprofile", );
+});
+
+
+router.get("/forgetpass", (req, res) => {
+  res.render("user/forgetpassword", {
+    err: req.session.emailerr,
+    layout: false,
+  });
+
 });
 
 

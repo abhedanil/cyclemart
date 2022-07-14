@@ -8,6 +8,7 @@ const orderSchema = new mongoose.Schema({
     grandTotal:{type:Number,default:0},
     ordered_on:{type:Date},
     payment_status:{type:String},
+    
 
 
     products:[{
@@ -18,6 +19,7 @@ const orderSchema = new mongoose.Schema({
         quantity:{type:Number,default:1},
         subTotal:{type:Number,default:0},
         status:{type:String,default:"order placed"},
+        productName:{type:String},
         orderCancelled:{type:Boolean,default:false}
     }],
 

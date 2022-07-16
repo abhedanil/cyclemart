@@ -4,6 +4,7 @@ const orderSchema = new mongoose.Schema({
             ref:"user"},
     paymentMethod: {type:String},
     Total:{type:Number,default:0},
+    mainTotal: {type:Number},
     ShippingCharge:{type:Number},
     grandTotal:{type:Number,default:0},
     ordered_on:{type:Date},

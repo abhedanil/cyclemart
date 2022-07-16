@@ -1,0 +1,59 @@
+ <div class="container-fluid">
+                             {{#if alert}}
+                                <div class="alert alert-warning alert-dismissible fade show" id="success-alert" role="alert">
+                                    {{alert}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                {{/if}}
+                    <!-- Page Heading -->
+                    {{!-- <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                        For more information about DataTables, please visit the <a target="_blank"
+                            href="https://datatables.net">official DataTables documentation</a>.</p> --}}
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4 ">
+                        <div class="card-header py-3 d-flex justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Carousel MANAGEMENT</h6>
+                        <a href="/admin/addCarousel"><button type="button" class="btn btn-primary">Add Carousel</button></a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                        
+                                            <th>Image</th>
+                                            <th>Carousel Heading</th>
+                                            <th>Carousel Sub-heading</th>
+                                            <th>Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        {{#each Carousel}}
+                                        <tr>
+                                            <td><img style="width: 80px; height: 80px;" src="/imgUploads/{{this.Image}}" class="img" alt="Free html4 bootstrap 4 template"></td>
+                                            <td>{{this.CarouselHeading}}</td>
+                                            <th>{{this.Sub_heading}}</th>
+                                           
+                                            <td>
+                                                 {{!-- <a href="/admin/Editproduct/{{this._id}}" class="btn btn-primary ">Edit</a> --}}
+                                                 {{!-- <button onclick="removeProductforcart('{{this._id}}')">  <i class="bi bi-trash"></i> </button> --}}
+                                                 <button onclick="deleteCarousel('{{this._id}}')">  <i class="bi bi-trash "></i> </button>
+                                                 {{!-- <a href="/admin/deleteproduct/{{this._id}}" class="btn btn-danger delete-button">Delete</a> --}}
+                                            </td>
+
+                                        </tr>
+                                        {{/each}}
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>

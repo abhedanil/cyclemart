@@ -26,9 +26,18 @@
               </div>
             </div>
             <div class="col-md-12 form-group" hidden>
-                      <input type="text" class="form-control" id="couponName" name="couponName" value="No Coupon Applied"  hidden   />       
+              <input type="text" class="form-control" id="couponName" name="couponName" value="No Coupon Applied" hidden />
             </div>
 
+             <div class="col-md-12 form-group" hidden>
+                <input type="text" class="form-control" id="discountedPrice" name="discountedPrice" value="0" hidden/>
+              </div>
+              <div class="col-md-12 form-group" hidden>
+                <input type="number" class="form-control" id="discoAmountpercentage" name="discoAmountpercentage" hidden value="0" />
+              </div>
+              <div class="col-md-12 form-group" hidden>
+                <input type="number" class="form-control" id="MainTotal" name="mainTotal"  value="{{grandTotal}}" hidden />
+              </div>
             <div class="form-group row">
               <div class="col-md-12">
                 <label for="c_address" class="text-black">Home Address <span class="text-danger">*</span></label>
@@ -137,26 +146,83 @@
         <div class="row mb-5">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Coupon Code</h2>
-            <div class="p-3 p-lg-5 border">
-              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Get Coupons</button><!-- Button trigger modal -->
+            <div class="flex-w flex-m w-full-sm mt-3 md-6   ">
+              <button type="button" class="btn btn-primary btn-lg " style="height:40px ;" data-toggle="modal"
+                data-target="#exampleModalCenter">
+                Get New Coupon
+              </button>
               <h6 class="mt-3">Enter your coupon code if you have one.</h6>
-              <input type="text" id="couponTotal" name="total" class="sizefull s-text7 p-l-22 p-r-22" value="{{grandTotal}}" hidden>
-              <div class="input-group w-75 pt-3">
-                <input type="text" class="form-control" id="couponInput" placeholder="Coupon Code" aria-label="Coupon Code"
-                  aria-describedby="button-addon2">
-                  <input type="text" id="DeliveryCharges" name="DeliveryCharge" class="sizefull s-text7 p-l-22 p-r-22"  value="{{DeliveryCharges}}"hidden>
-                {{!-- <div class="input-group-append">
-                  <button id="couponBtn" onclick="couponApply()" class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
-                </div> --}}
+
+              <input type="text" class="form-control" name="coupon" id="couponInput" autocapitalize="on"
+                placeholder="Coupon Code" />
+              <input type="text" id="couponTotal" name="total" class="sizefull s-text7 p-l-22 p-r-22"
+                value="{{netTotal}}" hidden>
+              <input type="text" id="DeliveryCharges" name="DeliveryCharge" class="sizefull s-text7 p-l-22 p-r-22"
+                value="{{DeliveryCharges}}" hidden>
+            </div>
+            <a id="couponBtn" onclick="couponApply()"
+              class="btn flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4 text-white text-center  mt-2  "
+              style="width: 100%;text-decoration: none;"><button class="btn btn-primary">Apply
+                Coupon</button></a>
+            <div class="mt-3">
+              <div class="alert alert-danger" style="display: none;" id="couponUsed" role="alert">
+                This Coupon was redeemed
+              </div>
+              <div class="alert alert-danger" style="display: none;" id="couponInvalid" role="alert">
+                This Coupon is
+                invalid
+              </div>
+              <div class="alert alert-success" style="display: none;" id="couponSuccess" role="alert">
+                Coupon Applied
+                Successfully
+              </div>
+              <div class="alert alert-warning" style="display: none;" id="couponExpired" role="alert">
+                Sorry!!! Your
+                Coupon has been Expired
               </div>
 
+              <div class="alert alert-warning" style="display: none;" id="couponMaxLimit" role="alert">
+                Sorry!!! Your
+                Coupon Has Reached Maximum Limit
+              </div>
+            </div>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+              
+              <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">All Available Coupons</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>    
+              </div>
+              {{#each AllCoupons }}
+              <div class="modal-body">
+                <div class="row ">
+                  <div class="col-12 ">
+                  <input type="text" name="" id="{{this._id}}" value="{{this.couponCode}}"  hidden >
+                  <div class="card">
+                    <div class="card-body">
+                    <h1 class="card-title">{{this.couponCode}}</h1>
+                    <p class="card-text">You Can get <span style="color:red"> {{this.discount}}%</span> Discount for this Coupon</p>
+                    <p>Expired on : {{this.expirydate}}</p>
+                    <button type="button" onclick="copyFunction('{{this._id}}')" class="btn btn-primary copy-button">Copy</button>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                </div>   
+              {{/each}}
+              <div class="modal-footer"></div>
+              </div>
+            </div>
             </div>
           </div>
         </div>
-        
+
 
         <!-- Modal -->
-        
+
         <!--model-end-->
         <div class="row mb-5">
           <div class="col-md-12">
@@ -187,12 +253,17 @@
                   <tr>
                     <td class="text-black font-weight-bold"><strong>Delivery Charge </strong></td>
                     <td></td>
-                    <td class="text-black">₹{{deliveryCharge}}</td>
+                    <td class="text-black">₹{{DeliveryCharges}}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-black font-weight-bold" ><strong>Coupon Discount </strong></td>
+                    <td></td>
+                    <td class="text-black" id="discount">-₹</td>
                   </tr>
                   <tr>
                     <td class="text-black font-weight-bold"><strong>Grand Total </strong></td>
                     <td></td>
-                    <td class="text-black">₹{{grandTotal}}</td>
+                    <td class="text-black" id="totalwithCoupon">₹{{grandTotal}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -200,7 +271,7 @@
 
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="paymentMethod" value="cod" id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1" require>
                   Cash On Delivery
                 </label>
 
@@ -217,7 +288,7 @@
             </div>
 
             <div class="form-group">
-              <button class="btn btn-primary btn-lg py-3 btn-block" type="submit">Proceed To Pay</button>
+              <button class="btn btn-primary " type="submit">Proceed To Pay</button>
             </div>
             </form>
           </div>
@@ -231,83 +302,185 @@
 </div>
 
 <footer class="site-footer border-top">
-      <div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-5 mb-lg-0">
         <div class="row">
-          <div class="col-lg-6 mb-5 mb-lg-0">
-            <div class="row">
-              <div class="col-md-12">
-                <h3 class="footer-heading mb-4">Navigations</h3>
-              </div>
-              <div class="col-md-6 col-lg-4">
-                <ul class="list-unstyled">
-                  <li><a href="#">Mountain Bikes</a></li>
-                  <li><a href="#">Road Bikes</a></li>
-                  <li><a href="#">Hybrid Bikes</a></li>
-                  <li><a href="#">Kids Bike</a></li>
-                </ul>
-              </div>
-              
-              <div class="col-md-6 col-lg-4">
-                <ul class="list-unstyled">
-                  <li><a href="#">Riding Accessories</a></li>
-                  <li><a href="#">Apparels</a></li>
-                  <li><a href="#"></a></li>
-                </ul>
-              </div>
-              <div class="col-md-6 col-lg-4">
-                <ul class="list-unstyled">
-                  <li><a href="#">Point of sale</a></li>
-                  <li><a href="#">Hardware</a></li>
-                  <li><a href="#">Software</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
-            <h3 class="footer-heading mb-4">Promo</h3>
-            <a href="#" class="block-6">
-              <img src="user/images/promoimg.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
-              <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
-              <p>Promo from  nuary 15 &mdash; 25, 2019</p>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="block-5 mb-5">
-              <h3 class="footer-heading mb-4">Contact Info</h3>
-              <ul class="list-unstyled">
-                <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
-                <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
-                <li class="email">emailaddress@domain.com</li>
-              </ul>
-            </div>
-
-            <div class="block-7">
-              <form action="#" method="post">
-                <label for="email_subscribe" class="footer-heading">Subscribe</label>
-                <div class="form-group">
-                  <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
-                  <input type="submit" class="btn btn-sm btn-primary" value="Send">
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="row pt-5 mt-5 text-center">
           <div class="col-md-12">
-            <p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            </p>
+            <h3 class="footer-heading mb-4">Navigations</h3>
           </div>
-          
+          <div class="col-md-6 col-lg-4">
+            <ul class="list-unstyled">
+              <li><a href="#">Mountain Bikes</a></li>
+              <li><a href="#">Road Bikes</a></li>
+              <li><a href="#">Hybrid Bikes</a></li>
+              <li><a href="#">Kids Bike</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <ul class="list-unstyled">
+              <li><a href="#">Riding Accessories</a></li>
+              <li><a href="#">Apparels</a></li>
+              <li><a href="#"></a></li>
+            </ul>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <ul class="list-unstyled">
+              <li><a href="#">Point of sale</a></li>
+              <li><a href="#">Hardware</a></li>
+              <li><a href="#">Software</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </footer>
+      <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+        <h3 class="footer-heading mb-4">Promo</h3>
+        <a href="#" class="block-6">
+          <img src="user/images/promoimg.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
+          <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
+          <p>Promo from nuary 15 &mdash; 25, 2019</p>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="block-5 mb-5">
+          <h3 class="footer-heading mb-4">Contact Info</h3>
+          <ul class="list-unstyled">
+            <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
+            <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
+            <li class="email">emailaddress@domain.com</li>
+          </ul>
+        </div>
+
+        <div class="block-7">
+          <form action="#" method="post">
+            <label for="email_subscribe" class="footer-heading">Subscribe</label>
+            <div class="form-group">
+              <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
+              <input type="submit" class="btn btn-sm btn-primary" value="Send">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-5 mt-5 text-center">
+      <div class="col-md-12">
+        <p>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;
+          <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+          <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i
+            class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank"
+            class="text-primary">Colorlib</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script>
+  function couponApply() {
+    alert("in apply")
+				let couponCode = document.getElementById('couponInput').value
+				let couponTotal = document.getElementById('couponTotal').value
+        let DeliveryCharges=document.getElementById('DeliveryCharges').value
+        document.getElementById('couponName').value=couponCode
+		
+				$.ajax({
+        
+					url: '/couponApply',
+					data: {
+						coupon: couponCode,
+						total: couponTotal,
+            DeliveryCharges:DeliveryCharges
+					},
+					method: 'post',
+					success: (response) => {
+         
+						if (response.couponSuccess) {  
+							let oldTotal =parseInt(document.getElementById('couponTotal').value)
+              {{!-- alert(response.total) --}}
+							let discount = oldTotal - parseInt(response.total)+parseInt(DeliveryCharges)
+              {{!-- alert(response.discountpers) --}}
+              let discountpercentag=parseInt(response.discountpers)
+              document.getElementById('totalwithCoupon').innerHTML = '₹' + response.total
+              document.getElementById('discountedPrice').value = discount
+							document.getElementById('discount').innerHTML = '₹' + discount
+              document.getElementById('discoAmountpercentage').value=discountpercentag
+              {{!-- document.getElementById('paidAmount').innerHTML ='₹' + (parseInt(response.total)) --}}  
+           {{!-- alert('RRRRRRRRRRRRRRRRRRRR') --}}
+
+              document.getElementById('MainTotal').value = response.total
+              {{!-- document.getElementById('amountToBePaid').value =(parseInt(response.total)) --}}
+							$("#discountspan").html(parseInt(discount))
+							$('#discountspan').show()
+							$('#discountLabel').show()
+							$('#discounttd').show()
+							$('#newTotal').show()
+							$('#tdTotal').show()
+							$('#totalOriginal').show()
+		
+							document.getElementById('grandTotal').innerHTML = '₹'+ response.total
+							$('#couponSuccess').show()
+							$('#couponUsed').hide()
+							$('#couponInvalid').hide()
+							$('#couponExpired').hide()
+							$('#couponMaxLimit').hide()
+						}
+		
+						if (response.couponUsed) {
+            
+							$('#couponUsed').show()
+							$('#couponSuccess').hide()
+							$('#couponInvalid').hide()
+							$('#couponExpired').hide()
+							$('#discountspan').hide()
+							$('#discountLabel').hide()
+							$('#couponMaxLimit').hide()
+						}
+						if (response.invalidCoupon) {
+							$('#couponInvalid').show()
+							$('#couponSuccess').hide()
+							$('#couponUsed').hide()
+							$('#couponExpired').hide()
+							$('#discountspan').hide()
+							$('#discountLabel').hide()
+							$('#couponMaxLimit').hide()
+						}
+						if (response.couponExpired) {
+							$('#couponExpired').show()
+							$('#couponSuccess').hide()
+							$('#couponInvalid').hide()
+							$('#couponUsed').hide()
+							$('#discountspan').hide()
+							$('#discountLabel').hide()
+							$('#couponMaxLimit').hide()
+						}
+						if (response.couponMaxLimit) {
+							$('#couponMaxLimit').show()
+							$('#couponExpired').hide()
+							$('#couponSuccess').hide()
+							$('#couponInvalid').hide()
+							$('#couponUsed').hide()
+							$('#discountspan').hide()
+							$('#discountLabel').hide()
+						}
+					}
+				})
+			}
+</script>
+
+
+
+
+
+
 <script>
 
   $('#checkout-Form').submit((e) => {
-    alert("in")
+    alert("in checkout")
     e.preventDefault()
     $.ajax({
 
@@ -339,9 +512,13 @@
       "handler": function (response) {
         {
           {
-            {{!-- alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature) --}}
+            {
+              {
+                !--alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)--
+              }
+            }
           }
         }
 
@@ -392,7 +569,27 @@
         }
       }
     })
-  }  
+  }
 
 
 </script>
+<script>
+  function copyFunction(couponId) {
+    var copyText = document.getElementById(couponId); copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+
+    $(".copy-button").on("click", function (e) {
+      e.preventDefault();
+      var self = $(this);
+      console.log(self.data("title"));
+      Swal.fire({
+        position: 'top-center',
+        icon: 'success',
+        title: 'Coupon Copied ' + "'" + copyText.value + "'",
+        showConfirmButton: false,
+        timer: 2000
+      })
+    })
+  }
+</script> 

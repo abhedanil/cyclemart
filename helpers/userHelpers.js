@@ -13,6 +13,7 @@ const cart = require("../models/cart");
 const ordermodel =require("../models/order")
 const wishlistmodel = require("../models/wishlist")
 const couponmodel = require("../models/coupon")
+const carouselmodel= require("../models/carousel")
 const Razorpay = require('razorpay');
 require("dotenv").config();
 const instance = new Razorpay({
@@ -142,6 +143,66 @@ module.exports={
           console.log(allCategory+'5555555555555555555555555555555555555');
           resolve(allCategory);
       })
+  }, 
+
+  getAllCoupons: () => {
+    return new Promise(async (resolve, reject) => {
+      const AllCoupons = await couponmodel.find({}).lean();
+      resolve(AllCoupons);
+    });
+  }, 
+
+  validateCoupon: (data, userId) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(data.coupon);
+      console.log(data.total);
+      console.log(data.DeliveryCharges);
+      obj = {};
+      const coupon = await couponmodel.findOne({ couponCode: data.coupon });
+      if (coupon) {
+        if (coupon.limit > 0) {
+          checkUserUsed = await couponmodel.findOne({
+            couponCode: data.coupon,
+            usedUsers: { $in: [userId] },
+          });
+          if (checkUserUsed) {
+            obj.couponUsed = true;
+            obj.msg = " You Already Used A Coupon";
+            console.log(" You Already Used A Coupon");
+            resolve(obj);
+          } else {
+            let nowDate = new Date();
+            date = new Date(nowDate);
+            if (date <= coupon.expirydate) {
+              await couponmodel.updateOne(
+                { couponCode: data.coupon },
+                { $push: { usedUsers: userId } }
+              );
+              await couponmodel.findOneAndUpdate(
+                { couponCode: data.coupon },
+                { $inc: { limit: -1 } }
+              );
+              let total = parseInt(data.total);
+              let percentage = parseInt(coupon.discount);
+              let discoAmount = ((total * percentage) / 100).toFixed();
+              obj.discoAmountpercentage = percentage;
+              obj.total = total - discoAmount;
+              obj.success = true;
+              resolve(obj);
+            } else {
+              obj.couponExpired = true;
+              resolve(obj);
+            }
+          }
+        } else {
+          obj.couponMaxLimit = true;
+          resolve(obj);
+        }
+      } else {
+        obj.invalidCoupon = true;
+        resolve(obj);
+      }
+    });
   },
 
   getSubcategories:()=>{
@@ -394,8 +455,10 @@ module.exports={
   
     price= parseInt(data.price)
     const procount = parseInt(data.count);
+    console.log(procount+"**********procount");
+    console.log(data.quantity)
       return new Promise(async(resolve,response)=>{
-      
+       
      
       if(data.count==-1&&data.quantity==1){
      
@@ -405,7 +468,7 @@ module.exports={
           .then((response)=>{
             resolve({removeProduct:true})
           })
-      }else{
+      }else{  
         console.log("-------------------------------")
         await cart.findOneAndUpdate(
           {user_Id: user._id,"products.pro_Id":data.product},
@@ -433,11 +496,8 @@ module.exports={
     })
   },
   placeOrder:(order,CartItems,netTotal,deliveryCharge,grandTotal,user)=>{
-    console.log("///////////////////////////////////");
-    console.log(netTotal);
-    console.log(deliveryCharge);
-    console.log(grandTotal);
-
+   const mainTotal= parseInt(order.mainTotal)
+   console.log(order.mainTotal)
     return new Promise(async(resolve,reject)=>{
       // let id=mongoose.Types.ObjectId(user._id)
       const status = order.paymentMethod==='cod'?'placed':'pending'
@@ -447,7 +507,10 @@ module.exports={
         paymentMethod:order.paymentMethod,
         Total:netTotal.total,
         ShippingCharge:deliveryCharge,
-        grandTotal:grandTotal,
+        grandTotal:order.mainTotal,
+        coupondiscountedPrice: order.discountedPrice,
+        couponPercent: order.discoAmountpercentage,
+        couponName: order.couponName,
         ordered_on:new Date(),
         payment_status:status,
         products:CartItems.products,
@@ -509,7 +572,7 @@ module.exports={
           receipt: ""+orderId
         };
         instance.orders.create(options, function(err, order) {
-          console.log(order+"order");
+          console.log(order);
           resolve(order)
         });
         
@@ -646,6 +709,62 @@ userdetails:(userid)=>{
     usersprofile= await User.findOne({}).lean()
     resolve(usersprofile)
   })
+},
+
+addAddress:(data,userId)=>{
+  return new Promise(async (resolve, reject) => {
+    const user = User.findOne({ _id: userId });
+    await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        $push: {
+          address: {
+            fname: data.fname,
+            lname: data.lname,
+            house: data.house,
+            towncity: data.towncity,
+            district: data.district,
+            state: data.state,
+            pincode: data.pincode,
+            email: data.email,
+            mobile: data.mobile,
+          },
+        },
+      }
+    );
+    resolve();
+  });
+},
+
+getAddresses: (userId) => {
+  return new Promise(async (resolve, response) => {
+    const Addresses = await User.findOne({ _id: userId }).lean();
+    resolve(Addresses);
+  });
+},
+
+getAddress:(addressId,userId)=>{
+  addressId = mongoose.Types.ObjectId(addressId);
+  userId = mongoose.Types.ObjectId(userId);
+  return new Promise(async(resolve,reject)=>{
+    const address= await User.aggregate([
+      {$match: {_id:userId} },
+      {$unwind: "$address" },
+      {$match:{"address._id":addressId}},
+      {$project:{address:1,_id:0}}
+    ])
+    console.log(address)
+    resolve(address)
+  })
+},
+
+getCarousel: () => {
+  return new Promise(async (resolve, reject) => {
+    const Carousel = carouselmodel.find().sort({ _id: -1 }).limit(3).lean();
+    console.log(Carousel)
+    resolve(Carousel);
+  });
 }
+
 
 }

@@ -1,0 +1,40 @@
+<div class="container mt-5 col-xl-6">
+    <form class="text-center border border-light p-5" action="/admin/AddCarousel" method="post"
+        enctype="multipart/form-data">
+
+        <p class="h4 mb-4">Add New Carousel</p>
+
+        <div class="form-row mb-4">
+            <div class="col">
+                <!--  name -->
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Carousel Heading"
+                    name="CarouselHeading">
+            </div>
+        </div>
+        <div class="form-row mb-4">
+            <div class="col">
+                <!--  name -->
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control"
+                    placeholder="Carousel Sub-heading" name="Subheading">
+            </div>
+        </div>
+
+        <label for="">Size 1920 x 570</label>
+        <div class="form-row mb-4">
+            <div class="col">
+                <input type="file" id="defaultRegisterFormLastName" class="form-control" placeholder="image"
+                    name="image1" />
+            </div>
+        </div>
+
+
+
+
+
+        {{!-- <button class="btn btn-info my-4 btn-block" type="submit">Submit</button> --}}
+        <input type="submit" class="btn btn-info my-4 btn-bloc k " style="width: 100%;">
+
+
+
+    </form>
+</div>

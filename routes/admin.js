@@ -270,13 +270,32 @@ router.post("/editProducts/:id", Storage.fields([
   }
 }
 )
+router.get("/CarouselManagement",async(req,res)=>{
+  Carousel = await adminHelpers.allCarousel()
 
+  res.render("admin/CarouselManagement",{layout:"adminlayout",Carousel})
+})
+
+router.get("/addCarousel",(req,res)=>{
+  res.render("admin/addCarousel",{layout:"adminlayout"})
+})
 
 router.get("/userManage",(req,res)=>{
   adminHelpers.getAllusers().then((user)=>{
     res.render("admin/userManage",{layout:"adminlayout", user})
   })
 })
+
+router.post(
+  "/AddCarousel",
+  Storage.fields([{ name: "image1", maxCount: 1 }]),
+  (req, res) => {
+    const img1 = req.files.image1[0].filename;
+    adminHelpers.addCarousel(req.body, img1).then(() => {
+      res.redirect("/admin/CarouselManagement");
+    });
+  }
+);
 
 router.get("/blockUser/:id",(req,res)=>{
   console.log("entereed +++++++++++++++")

@@ -10,6 +10,7 @@ const productData =require("../models/products")
 const userData = require("../models/user")
 const ordermodel = require("../models/order")
 const couponmodel = require("../models/coupon")
+const carouselmodel= require("../models/carousel")
 module.exports={
 
     doLogin:(adminDaata)=>{
@@ -285,6 +286,26 @@ return new Promise(async(resolve,reject)=>{
   }) 
 },
 
+allCarousel:()=>{
+  return new Promise(async (resolve, reject) => {
+    const allCarousel = await carouselmodel.find({}).lean();
+    resolve(allCarousel);
+  });
+},
+
+
+
+addCarousel: (data, image) => {
+  return new Promise(async (resolve, reject) => {
+    const addCarousel = new carouselmodel({
+      CarouselHeading: data.CarouselHeading,
+      Sub_heading: data.Subheading,
+      Image: image,
+    });
+    await addCarousel.save();
+    resolve();
+  });
+},
 getAllcoupons:()=>{
   return new Promise(async(resolve,reject)=>{
 

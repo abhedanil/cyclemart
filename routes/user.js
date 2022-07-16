@@ -19,8 +19,8 @@ const VerifyLogin =(req,res,next)=>{
     res.redirect("/login")
   }
 }
-
-
+   
+ 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   let user = req.session.user;
@@ -28,9 +28,10 @@ router.get('/', async function (req, res, next) {
   if(user){
     CartCount = await userHelpers.getCartCount(user)
   }
+  Carouselimage = await userHelpers.getCarousel();
   const categoryData =await userHelpers.getAllCategory()
   const showProducts = await userHelpers.getAllProducts()
-  res.render('user/index', { user, showProducts, categoryData, CartCount  });
+  res.render('user/index', { Carouselimage,user, showProducts, categoryData, CartCount  });
 
 
 });
@@ -188,17 +189,46 @@ router.get("/logout", function (req, res, next) {
   req.session.destroy();
 });
 
-router.get('/forgetpassword', function (req, res, next) {
-  res.render("user/forgetPassword")
+router.get('/forgetpassword',VerifyLogin, function (req, res, next) {
+  res.render("user/forgetPassword",{layout:false})
 })
 
+router.get("/address-page", VerifyLogin, async (req, res) => {
+  const user= req.session.user
+  const Addresses = await userHelpers.getAddresses(req.session.user._id);
+
+  res.render("user/address",{Addresses,user});
+});
+
+
+  router.get("/addAddress", VerifyLogin, (req, res) => {
+    let user = req.session.user;
+    res.render("user/addaddress", { user });
+  });
+
+  router.post("/addAddress", VerifyLogin, (req, res) => {
+    let user = req.session.user;
+    userHelpers.addAddress(req.body,req.session.user._id).then((response)=>{
+      console.log("dsugh");
+      res.redirect("/address-page");
+    })
+  });
+
+  router.get("/editAddress/:id", VerifyLogin, async(req, res) => {
+    console.log(req.params.id+"///////////////////")
+    const Address = await userHelpers.getAddress(req.params.id, req.session.user._id)
+    userdetails= await userHelpers.userdetails(req.session.user._id)
+    console.log(Address+"addresssss")
+     const user=req.session.user
+        res.render("user/editaddress",{Address,userdetails});
+  });
 
 //shopping
 
 router.get("/shopPage", async (req, res, next) => {
   let user = req.session.user;
   let CartCount =null
-  if(user){
+  if(user){ 
     CartCount = await userHelpers.getCartCount(user)
   }
   const showProducts = await userHelpers.getProductsForShop()
@@ -266,6 +296,7 @@ router.get("/add-to-cart/:id",VerifyLogin ,(req, res, next) => {
   })
 });
 
+
 router.get("/addtowishlist/:id",VerifyLogin,(req,res,next)=>{
   console.log(req.params.id)
   console.log("++++++++++")  
@@ -314,18 +345,19 @@ router.post("/removeCart", (req, res, next) => {
   });
 });
 
-router.get('/checkout',async(req,res,next)=>{
+router.get('/checkout',async(req,res,next)=>{ 
   const user= req.session.user
   let cartItems =await userHelpers.getCartProducts(req.session.user._id)
   const totalAmount = await userHelpers.NetTotal(req.session.user._id)     
-  const netTotal = totalAmount.nettTotal.total
-  const deliveryCharge = await userHelpers.deliverycharge(netTotal) 
+  const netTotal = totalAmount.nettTotal.total 
+  const DeliveryCharges = await userHelpers.deliverycharge(netTotal) 
   const grandTotal = await userHelpers.grandTotal(netTotal,deliveryCharge) 
+  const AllCoupons = await userHelpers.getAllCoupons();
   let cartCount = await userHelpers.getCartCount(req.session.user._id)
 
   
   
-  res.render('user/checkout',{user,cartItems,cartCount,netTotal,deliveryCharge,grandTotal})
+  res.render('user/checkout',{AllCoupons,user,cartItems,cartCount,netTotal,DeliveryCharges,grandTotal})
 })
 
 router.post('/place-order',async(req,res)=>{
@@ -336,25 +368,26 @@ router.post('/place-order',async(req,res)=>{
   const netTotal = totalAmount.nettTotal
   const deliveryCharge = await userHelpers.deliverycharge(netTotal)
   const grandTotal = await userHelpers.grandTotal(netTotal.total,deliveryCharge)
+  const mainTotal = req.body.mainTotal
   userHelpers.placeOrder(req.body,cartItem,netTotal,deliveryCharge,grandTotal,user)
   .then((response)=>{
     req.session.orderId = response._id
-
-    console.log("2222222222222/22222222222222") 
+    const orderId = response._id
+    console.log(orderId) 
     if(req.body["paymentMethod"]=="cod"){ 
       res.json({codSuccess:true})
     } 
      else{
-      userHelpers.genearteRazorpay(response._id,grandTotal).then((response)=>{
+      userHelpers.genearteRazorpay(orderId,mainTotal).then((response)=>{
 
         res.json(response)
       })
      }  
-    
+     
   })
 })
 
-
+ 
 router.post("/verify-payment",(req,res)=>{
   console.log(req.body)
   userHelpers.verifyPayment(req.body).then(()=>{
@@ -415,21 +448,39 @@ router.get("/userprofile",VerifyLogin,async(req,res)=>{
   console.log(userdetails)
   res.render("user/userprofile",{userdetails,user})
 })
-
+ 
 router.get("/edit-profile",VerifyLogin, async (req, res) => {
   // const Addresses = await userHelper.getAddresses(req.session.user);
   // cartcount = await userHelper.getcartcount(req.session.user._id);
   res.render("user/editprofile", );
 });
-
-
-router.get("/forgetpass", (req, res) => {
-  res.render("user/forgetpassword", {
-    err: req.session.emailerr,
-    layout: false,
+  
+router.post("/couponApply", async (req, res) => {
+  console.log("inside post coupon apply")
+  DeliveryCharges = parseInt(req.body.DeliveryCharges);
+  let todayDate = new Date().toISOString().slice(0, 10);
+  let userId = req.session.user._id;
+  userHelpers.validateCoupon(req.body, userId).then((response) => {
+    req.session.couponTotal = response.total;
+    if (response.success) {
+      res.json({
+        couponSuccess: true,
+        total: response.total + DeliveryCharges,
+        discountpers: response.discoAmountpercentage,
+      }); 
+    } else if (response.couponUsed) {  
+      res.json({ couponUsed: true });
+    } else if (response.couponExpired) {
+      res.json({ couponExpired: true });
+    } else if (response.couponMaxLimit) {
+      res.json({ couponMaxLimit: true });
+    } else {
+      res.json({ invalidCoupon: true });
+    }
   });
-
 });
+
+
 
 
 module.exports = router;

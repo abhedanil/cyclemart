@@ -417,8 +417,8 @@ module.exports={
         if(total.length ==0){
        resolve({status:true})
         }else{
-          let nettTotal=total.pop();
-    
+          let nettTotal=total.pop()
+          console.log(nettTotal, "hhdhhdhhdhd");
          
         resolve({nettTotal,status:true}) 
       }
@@ -438,17 +438,18 @@ module.exports={
       })
     },
     grandTotal:(netTotal,deliveryCharge)=>{
+      console.log(netTotal, deliveryCharge, "ssssssssssssssssssssssssss")
       return new Promise((resolve,reject)=>{
         const grandTotal = netTotal+deliveryCharge
         resolve(grandTotal)
-        console.log(grandTotal)
+       
       })
     },
 
     changeProductQuantity:(data, user)=>{
       console.log('skk ');
     // cartid= data.cartid;
-    console.log(data)
+    console.log(data) 
     cart_id=data.cartid
     proId= data.product;
     quantity= parseInt(data.quantity);
@@ -564,7 +565,7 @@ module.exports={
     },
 
     genearteRazorpay:(orderId,grandTotal)=>{
-
+      console.log(grandTotal,"total");
       return new Promise((resolve,reject)=>{
         var options = {
           amount: grandTotal*100,  // amount in the smallest currency unit

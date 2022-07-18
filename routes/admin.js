@@ -12,6 +12,16 @@ const moment = require('moment')
 
 /* GET users listing. */
 
+
+const VerifyLogin = (req,res,next)=>{
+  if(req.session.adminLogged){
+    next()
+  } 
+  else{
+    res.redirect("/admin")
+  }
+}
+
 router.get("/", function (req, res, next) {
   if (req.session.adminLogged) {
     res.redirect("/admin/adminPage")
@@ -47,7 +57,7 @@ router.post("/adminlogin1", function (req, res) {
 })
 
 
-router.get("/addcategory", (req, res) => {
+router.get("/addcategory",VerifyLogin, (req, res) => {
   adminHelpers.getCategories().then((allCategory) => {
     res.render("admin/addCategory", { allCategory, layout: "adminlayout" })
   });
@@ -59,7 +69,7 @@ router.get("/addcategory", (req, res) => {
 router.get("/")
 
 
-router.get("/addProducts", async (req, res) => {
+router.get("/addProducts",VerifyLogin, async (req, res) => {
   const category = await adminHelpers.getCategories();
   const BrandName = await adminHelpers.getBrands();
   const subcategory = await adminHelpers.getSubcategories();
@@ -199,7 +209,7 @@ router.post("/addCategory", (req, res) => {
 });
 
 
-router.get("/viewProducts", async (req, res) => {
+router.get("/viewProducts",VerifyLogin, async (req, res) => {
   const products = await adminHelpers.getProducts()
   const brands = await adminHelpers.getBrands()
   const categories = await adminHelpers.getCategories()
@@ -219,7 +229,7 @@ router.get("/viewProducts", async (req, res) => {
 })
 
 
-router.get("/deleteProducts/:id", (req, res) => {
+router.get("/deleteProducts/:id",VerifyLogin, (req, res) => {
   console.log("hai")
   console.log(req.params.id + 'inside delete method')
   const proId = req.params.id
@@ -231,7 +241,7 @@ router.get("/deleteProducts/:id", (req, res) => {
 })
 
 
-router.get("/editProduct/:id", async (req , res) => {
+router.get("/editProduct/:id",VerifyLogin, async (req , res) => {
 
   console.log("hai")
   const product = await adminHelpers.getoneProduct(req.params.id)
@@ -270,17 +280,17 @@ router.post("/editProducts/:id", Storage.fields([
   }
 }
 )
-router.get("/CarouselManagement",async(req,res)=>{
+router.get("/CarouselManagement",VerifyLogin,async(req,res)=>{
   Carousel = await adminHelpers.allCarousel()
 
   res.render("admin/CarouselManagement",{layout:"adminlayout",Carousel})
 })
 
-router.get("/addCarousel",(req,res)=>{
+router.get("/addCarousel",VerifyLogin,(req,res)=>{
   res.render("admin/addCarousel",{layout:"adminlayout"})
 })
 
-router.get("/userManage",(req,res)=>{
+router.get("/userManage",VerifyLogin,(req,res)=>{
   adminHelpers.getAllusers().then((user)=>{
     res.render("admin/userManage",{layout:"adminlayout", user})
   })
@@ -297,7 +307,7 @@ router.post(
   }
 );
 
-router.get("/blockUser/:id",(req,res)=>{
+router.get("/blockUser/:id",VerifyLogin,(req,res)=>{
   console.log("entereed +++++++++++++++")
 const proId = req.params.id
 console.log(proId)
@@ -307,14 +317,14 @@ adminHelpers.blockUser(proId).then((response)=>{
 })
 })
 
-router.get("/unBlockUser/:id",(req,res)=>{
+router.get("/unBlockUser/:id",VerifyLogin,(req,res)=>{
   const proId =req.params.id
   adminHelpers.unBlockUser(proId).then((response)=>{
     res.json({status: true})
   })
 })
 
-router.get("/manageOrders",async(req,res)=>{
+router.get("/manageOrders",VerifyLogin,async(req,res)=>{
 
   const orders = await adminHelpers.getAllOrders()
 
@@ -326,7 +336,7 @@ router.get("/manageOrders",async(req,res)=>{
   res.render("admin/viewOrders",{layout:"adminlayout",orders})
 })
 
-router.get("/viewordersinorder/:id",async(req,res)=>{ 
+router.get("/viewordersinorder/:id",VerifyLogin,async(req,res)=>{ 
 
   orderProducts= await adminHelpers.OrderDetails(req.params.id)
   console.log(orderProducts+"++++++++++++")
@@ -344,7 +354,7 @@ router.post('/changeOrderStatus',(req,res)=>{
 
 
 
-router.get("/addCoupon",(req,res)=>{
+router.get("/addCoupon",VerifyLogin,(req,res)=>{
 
   res.render("admin/addCoupon",{layout:"adminlayout"})
 })
@@ -359,7 +369,7 @@ router.post("/add-coupon",(req,res)=>{
     res.redirect("/admin/addCoupon")  
   })
 })  
-router.get("/viewCoupons",(async(req,res)=>{
+router.get("/viewCoupons",VerifyLogin,(async(req,res)=>{
     const allcoupons = await adminHelpers.getAllcoupons()
   
     console.log(allcoupons)
@@ -367,7 +377,7 @@ router.get("/viewCoupons",(async(req,res)=>{
     res.render("admin/viewCoupons",{allcoupons,layout:"adminlayout"}) 
 }))
  
-router.get("/deleteCoupons/:id",(req,res)=>{
+router.get("/deleteCoupons/:id",VerifyLogin,(req,res)=>{
     console.log("************")
     console.log(req.params.id) 
   
@@ -378,7 +388,7 @@ router.get("/deleteCoupons/:id",(req,res)=>{
 
 })
 
-router.get("/logout", function (req, res) {
+router.get("/logout",VerifyLogin, function (req, res) {
   req.session.destroy(() => {
     res.redirect("/admin")
   })

@@ -12,6 +12,8 @@ body {
 ::selection {
   background: #000;
   color: #fff; }
+ 
+
 
 a {
   -webkit-transition: .3s all ease;
@@ -751,3 +753,5 @@ a {
   width: 120px;
   border-radius: 50%;
   margin-bottom: 20px; }
+
+

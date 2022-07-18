@@ -20,7 +20,7 @@ const VerifyLogin =(req,res,next)=>{
   }
 }
     
- 
+let filterResult;
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   let user = req.session.user;
@@ -227,34 +227,46 @@ router.get("/address-page", VerifyLogin, async (req, res) => {
 
 //shopping
 
-router.get("/shopPage", async (req, res, next) => {
+router.get("/shopPage",  (req, res, next) => {
+  userHelpers.getProductsForShop().then(async(products)=>{
+    filterResult = products
+    res.redirect("/filterPage")
+  })
+  
+})
+
+router.get("/filterPage",async(req,res)=>{
   let user = req.session.user;
   let CartCount =null
   if(user){ 
     CartCount = await userHelpers.getCartCount(user)
   }
-  const showProducts = await userHelpers.getProductsForShop()
   const subcategoryData =await userHelpers.getSubcategories()
   const categoryData =await userHelpers.getAllCategory()
-
-    res.render('user/shop', { user, showProducts, CartCount , subcategoryData,  categoryData });
-
- 
+  console.log(categoryData)
+  res.render('user/shop', { filterResult, user, CartCount , subcategoryData,  categoryData });
 })
 
-router.get("/shopsingle/:id", async (req, res) => {
+router.get("/shopsingle/:id", async (req, res,next) => {
   let user = req.session.user
   CartCount=null
+
   if(user){
     CartCount = await userHelpers.getCartCount(user)
   }  
    
-  let product = await userHelpers.getSingleProduct(req.params.id)
-  res.render("user/shopSingle", { product, user: req.session.user , CartCount });
+  await userHelpers.getSingleProduct(req.params.id).then((response)=>{
+    console.log(response)
+    const product=response
+    res.render("user/shopSingle", { product, user: req.session.user , CartCount });
+  })
+  .catch((error) => {
+    console.log("inside catch")
+    next(error)
+  });
+}); 
 
-});
-
-
+  
 
 router.get("/cart", VerifyLogin,async(req,res,next) => {
   let user = req.session.user
@@ -487,6 +499,16 @@ router.post("/couponApply", async (req, res) => {
   });
 });
 
+router.post("/search-filter",(req,res)=>{
+  console.log("*******")
+  let a = req.body;
+  let categoryFilter = a.category
+  userHelpers.searchfilter(categoryFilter).then((result)=>{
+    filterResult = result;
+    res.json({status:true})
+  })
+
+})
 
 
 

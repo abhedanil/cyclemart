@@ -232,9 +232,28 @@ module.exports={
     
       await productData.findOne({_id:data}).populate("category").populate("subcategory").populate("brand").lean().then((product)=>{
         resolve(product)
+        }).catch((err)=>{
+          console.log("inside catch helpers")
+         throw err
         })
+        
        
       })
+    },
+ 
+    searchfilter:(categoryFilter)=>{
+     console.log(categoryFilter)
+      return new Promise (async(resolve,reject)=>{
+      let result;  
+      const categoryid = mongoose.Types.ObjectId(categoryFilter)
+      result = await productData.aggregate([
+          {
+            $match:{category:categoryid}
+          }
+        ])
+        resolve(result);
+      })
+
     },
 
      addTocart: (proId, userId) => {

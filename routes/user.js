@@ -330,11 +330,7 @@ router.get("/viewWishlist",VerifyLogin,async(req,res)=>{
   console.log("11111111111111wish")
   const wishlistProducts = await userHelpers.getWishlist(req.session.user)
   console.log(wishlistProducts)
-  
-
-  
-  
-  res.render("user/wishlist",{wishlistProducts,user,cartCount})
+  res.render("user/wishlist",{user,wishlistProducts,cartCount})
 })
 
 

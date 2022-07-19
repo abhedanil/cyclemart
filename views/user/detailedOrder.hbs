@@ -101,9 +101,7 @@
 <script>
     // delete popup
     function cancelOrder(orderId, proId) {
-      alert("inside")
-      alert(proId)
-      alert(orderId)
+    
       
 
 					Swal.fire({
@@ -135,12 +133,12 @@
           },
             method: 'post',
             success: (response) => {
-             alert(response) 
+            
               if (response.status) {
-                alert("success")
+               
                location.href = '/view-order-products/' + orderId 
               } else {
-                console.log("failure")
+                
             location.href = '/view-order-products/' + orderId 
           }
             }

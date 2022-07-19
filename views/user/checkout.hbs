@@ -383,7 +383,7 @@
 
 <script>
   function couponApply() {
-    alert("in apply")
+   
 				let couponCode = document.getElementById('couponInput').value
 				let couponTotal = document.getElementById('couponTotal').value
         let DeliveryCharges=document.getElementById('DeliveryCharges').value
@@ -481,7 +481,7 @@
 <script>
 
   $('#checkout-Form').submit((e) => {
-    alert("in checkout")
+   
     e.preventDefault()
     $.ajax({
 
@@ -490,11 +490,11 @@
       data: $('#checkout-Form').serialize(),
       success: (response) => {
         if (response.codSuccess) {
-          alert("show thanks page")
+         
           location.href = '/successPage'
         }
         else {
-          alert("online payment")
+        
           razorpayPayment(response)
         }
       }
@@ -552,7 +552,7 @@
   }
 
   function verifyPayement(payment,order) {
-    alert("in verifypayment")
+   
     $.ajax({
       url: '/verify-payment',
       data: {
@@ -562,7 +562,7 @@
       method: 'post',
       success: (response) => {
         if (response.status) {
-          alert("successpage")
+         
           location.href = '/successPage'
         }
         else {

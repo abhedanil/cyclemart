@@ -232,9 +232,6 @@ module.exports={
     
       await productData.findOne({_id:data}).populate("category").populate("subcategory").populate("brand").lean().then((product)=>{
         resolve(product)
-        }).catch((err)=>{
-          console.log("inside catch helpers")
-         throw err
         })
         
        
